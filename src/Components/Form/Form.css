@@ -43,3 +43,9 @@
     font-family: 'Open Sans','Courier New', Courier, monospace;
     font-size: 12px;
   }
+
+  @media screen and (max-width: 700px) {
+    .form-input-box {
+      width: 90%;
+    }
+  }

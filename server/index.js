@@ -17,8 +17,8 @@ massive({
     ssl: { rejectUnauthorized: false }
 }).then(db => {
     app.set('db', db);
-        console.log('bd connected');
-        });
+        app.listen(PORT, (_) => console.log(`running on ${PORT}`));
+    });
 
     app.use(
         session({
@@ -41,4 +41,3 @@ app.post("/api/post", postCtrl.createPost);
 app.get("/api/post/:id", postCtrl.readPost);
 app.delete("/api/post/:id", postCtrl.deletePost);
 
-app.listen(PORT, (_) => console.log(`running on ${PORT}`));

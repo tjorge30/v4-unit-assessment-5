@@ -91,7 +91,7 @@ login: (req, res) => {
 // Send a 200 status to communicate that everything went well
 logout: (req, res) => {
     req.session.destroy();
-    res.redirect('http://localhost:3000')
+    res.redirect('http://localhost:4000')
   },
 
 // getUser
@@ -101,7 +101,7 @@ getUser: (req, res) => {
     if (req.session.user) { 
         res.status(200).send(req.session.user)
     } else {
-      res.redirect('http://localhost:3000');
+      res.redirect('http://localhost:4000');
     }
   }
 

@@ -41,7 +41,7 @@ module.exports = {
     createPost: (req, res) => {
       const db = req.app.get('db');
       let { id } = req.session.user;
-      let { title, img, content } = req.body;
+      let { title, img, content } =    req.body;
       let date = new Date;
 
       if (id)
