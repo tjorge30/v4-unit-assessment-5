@@ -35,8 +35,8 @@ class Nav extends Component {
       return this.props.location.pathname !== '/' &&
         <div className='nav'>
           <div className='nav-profile-container'>
-            {/* <div className='nav-profile-pic' style={{ backgroundImage:`url(${reduxState.pic})`}}></div>
-            <p>{reduxState.username}</p> */}
+            <div className='nav-profile-pic' style={{ backgroundImage:`url(${this.props.pic})`}}></div>
+            <p>{this.props.username}</p>
           </div>
           <div className='nav-links'>
             <Link to='/dash'><img className='nav-img' src={homeLogo} alt='home' /></Link>
@@ -47,9 +47,9 @@ class Nav extends Component {
   }
 }
 
-// const mapStateToProps = (reduxState) => {
-//   return reduxState;
-// }
+const mapStateToProps = (reduxState) => {
+  return reduxState;
+}
 
 //mapStateToProps
-export default withRouter(connect(null, {updateUser, logout})(Nav));
+export default withRouter(connect(mapStateToProps, {updateUser, logout})(Nav));

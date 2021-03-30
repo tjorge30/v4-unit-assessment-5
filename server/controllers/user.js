@@ -18,11 +18,11 @@ register: async (req, res) => {
     const db = req.app.get('db');
 
     // receive the information to eventually add a new user
-    const { username, password, profile_pic} = req.body;
+    const { username, password, profile_pic } = req.body;
 
     // check if an existing user matches the email trying to be registered with. if so, reject
     try {
-        const [existingUser] = await db.get_user_by_username(username)
+        const [existingUser] = await db.user.find_user_by_username(username)
 
         if (existingUser) {
             return res.status(409).send('User already exists')
@@ -33,7 +33,7 @@ register: async (req, res) => {
         const hash = bcrypt.hashSync(password, salt)
 
         // add the user to the db and get back their id
-        const [ newUser ] = await db.register_user(username, hash, profile_pic);
+        const [ newUser ] = await db.user.create_user(username, hash, profile_pic);
 
         // create a session for the user using the db response
         req.session.user = newUser;
@@ -60,19 +60,18 @@ login: (req, res) => {
     const db = req.app.get('db'); 
 
     // get necessary info from req.body
-    const { username, password } = req.body;
+    const { username, password} = req.body;
     
     // check if that user exists, if they do NOT, reject request
-    db.get_user_by_username(username)
+    db.user.find_user_by_username(username)
         .then(([existingUser]) => {
             if (!existingUser) {
-                return res.status(403).send('Incorrect Username or Password')
+                return res.status(403).send('User not found. Please register as a new user')
             }
 
             // compare the password from req.body with the stored hash..if mismatch, reject
-            const isAuthenticated = bcrypt.compareSync(password, existingUser.hash)
-
-            if (!isAuthenticated) {
+            const isAuthenticated = bcrypt.compareSync(password, existingUser.hash);
+             if (!isAuthenticated) {
                 return res.status(403).send('Incorrect Username or Password')
             }
             // set up session and be sure to not include the hash in the session
@@ -91,7 +90,7 @@ login: (req, res) => {
 // Send a 200 status to communicate that everything went well
 logout: (req, res) => {
     req.session.destroy();
-    res.redirect('http://localhost:4000')
+    res.status(200);  
   },
 
 // getUser
@@ -101,7 +100,7 @@ getUser: (req, res) => {
     if (req.session.user) { 
         res.status(200).send(req.session.user)
     } else {
-      res.redirect('http://localhost:4000');
+      res.status(404);
     }
   }
 
